@@ -1,0 +1,23 @@
+{
+  "namespace": "com.ericsson.rdi_tk.schema.events.avro",
+  "type": "record",
+  "doc":"Transformed counter that is used by counter storage",
+  "name": "RdiDatastreamTransformedCounter",
+  "fields" : [
+    {   "name":"original_value",
+        "type":["null","string"],
+        "doc": "Original value of the counter"
+    },
+    {   "name":"single_value",
+        "type":["null","long"],
+        "doc": "Single value of the counter"
+    },
+    {   "name":"multiple_value",
+        "type":["null",{"type":"array","items":"long"}],
+        "doc": "Multiple value of the counter"
+    },
+    {   "name":"uncompressed_value",
+        "type":["null",{"type":"array","items":"long"}],
+        "doc": "Uncompressed value of the counter"
+    }]
+}

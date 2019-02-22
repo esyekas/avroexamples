@@ -1,0 +1,42 @@
+{
+  "namespace": "com.ericsson.rdi_tk.schema.events.avro",
+  "type": "record",
+  "doc":"RDI Parser PM",
+  "name": "RdiDatastreamParserPmEvent",
+  "fields" : [
+    {
+        "name":"customer_global_id",
+         "type":"string", "default": "unknown",
+          "doc":"Customer global ID. Default is \"unknown\""
+    },
+    {
+        "name":"fdn",
+        "type":"string",
+        "doc":"Full Distinguished Name (FDN) when presented on a Management System starts at the Management System own root object"
+    },
+    {
+        "name":"software_version",
+        "type":"string",
+        "doc":"software version"
+    },
+    {
+        "name":"rop_begin_timestamp",
+        "type":"long", "logicalType":"timestamp-millis",
+        "doc":"Unix time UTC Timestamp for the ROP(result of period) counter when it starts"
+    },
+    {
+        "name":"rop_length",
+        "type":"long",
+        "doc":"Duration of the ROP(result of period)"
+    },
+    {
+        "name":"attributes_storage",
+        "type": ["null",{"type":"map", "values":"string"}],
+        "doc":"File metadata information"
+    },
+    {
+        "name":"counters_storage",
+        "type": ["null",{"type":"map", "values":"com.ericsson.rdi_tk.schema.events.avro.RdiDatastreamTransformedCounter"}],
+        "doc":"Counter storage information"
+    }]
+}
