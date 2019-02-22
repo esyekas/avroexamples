@@ -1,10 +1,20 @@
 package com.github.kashan.avro.generic;
 
 import org.apache.avro.Schema;
+import org.apache.avro.file.DataFileReader;
+import org.apache.avro.file.DataFileWriter;
 import org.apache.avro.generic.GenericData;
+import org.apache.avro.generic.GenericDatumReader;
+import org.apache.avro.generic.GenericDatumWriter;
+import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.generic.GenericRecordBuilder;
+import org.apache.avro.io.DatumReader;
+import org.apache.avro.io.DatumWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.IOException;
 
 public class GenericRecordExamples {
     public static void main(String[] args) {
@@ -43,8 +53,37 @@ public class GenericRecordExamples {
         System.out.println(customer);
 
     //Step 2: Write that generic record to a file
+    // writing to a file
+        final DatumWriter<GenericRecord> datumWriter = new GenericDatumWriter<>(schema);
+        try (DataFileWriter<GenericRecord> dataFileWriter = new DataFileWriter<>(datumWriter)) {
+            dataFileWriter.create(customer.getSchema(), new File("customer-generic.avro"));
+            dataFileWriter.append(customer);
+            System.out.println("Written customer-generic.avro");
+        } catch (IOException e) {
+            System.out.println("Couldn't write file");
+            e.printStackTrace();
+        }
     //Step 3: Read a generic record from a file
-    //Step 4: Interpret as a generic record
+        // reading from a file
+        final File file = new File("customer-generic.avro");
+        final DatumReader<GenericRecord> datumReader = new GenericDatumReader<>();
+        GenericRecord customerRead;
+        try (DataFileReader<GenericRecord> dataFileReader = new DataFileReader<>(file, datumReader)){
+            customerRead = dataFileReader.next();
+            System.out.println("Successfully read avro file");
+            System.out.println(customerRead.toString());
+
+            // get the data from the generic record
+            System.out.println("First name: " + customerRead.get("first_name"));
+
+            // read a non existent field
+            System.out.println("Non existent field: " + customerRead.get("not_here"));
+        }
+        catch(IOException e) {
+            e.printStackTrace();
+        }
+
+        //Step 4: Interpret as a generic record
 
 
     }
